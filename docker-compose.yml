@@ -1,24 +1,41 @@
 services:
-  mysql:
+  # client:
+  #   image: alpine:latest
+  #   container_name: sqlClient
+  #   # command: sh -c "apk add mysql-client && mysqldump -u root -p root_password -h mysql8 northwind < schema.sql"
+  #   command: ["sleep", "infinity"]
+  #   restart: unless-stopped
+  #   volumes:
+  #     - scripts:/scripts
+  #   networks:
+  #     - my-network
+  #   depends_on:
+  #     - mysql8
+
+
+  mysql8:
     image: mysql:8.0
     container_name: mysql8
-    restart: always
+    restart: unless-stopped
     env_file:
       - mysql8.env
     ports:
       - "3306:3306"
+    networks:
+      - my-network
     volumes:
-      - ./mydata:/var/lib/mysql
-      - ./mylogs:/var/log/mysql
-      - ./init:/docker-entrypoint-initdb.d
+      - mydata:/var/lib/mysql/
+      - mylogs:/var/log/mysql/
+      - init:/docker-entrypoint-initdb.d/
+      - scripts:/scripts
 
 volumes:
   mydata:
-    driver: local
   mylogs:
-    driver: local
   init:
-    driver: local
+  scripts:
 
 
-
+networks:
+  my-network:
+    driver: bridge
