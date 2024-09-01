@@ -1,5 +1,3 @@
-# version: '3.8'
-
 services:
   mysql:
     image: mysql:8.0
@@ -15,7 +13,11 @@ services:
       - ./init:/docker-entrypoint-initdb.d
 
 volumes:
-  mysql_data:
+  mydata:
+    driver: local
+  mylogs:
+    driver: local
+  init:
     driver: local
 
 
