@@ -1,5 +1,4 @@
 services:
-
   mysql8:
     image: mysql:8.0
     container_name: mysql8_bd1
@@ -15,6 +14,10 @@ services:
       - mylogs:/var/log/mysql/
       - init:/docker-entrypoint-initdb.d/
       - scripts:/scripts
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
 
 volumes:
   mydata:
@@ -22,11 +25,9 @@ volumes:
   init:
   scripts:
 
-
 networks:
   my-network:
     driver: bridge
-
 
   # client:
   #   image: alpine:latest
